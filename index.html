@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Home</title>
+
+<style>
+
+body{
+
+    font-family: Arial;
+
+    margin:0;
+
+    background:#f4f4f4;
+
+    text-align:center;
+
+}
+
+.box{
+
+    width:320px;
+
+    background:white;
+
+    margin:120px auto;
+
+    padding:20px;
+
+    border-radius:10px;
+
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
+
+}
+
+input{
+
+    width:90%;
+
+    padding:10px;
+
+    margin:10px 0;
+
+}
+
+.btn{
+
+    background:green;
+
+    color:white;
+
+    border:none;
+
+    padding:10px;
+
+    width:95%;
+
+    cursor:pointer;
+
+    border-radius:5px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>🚗 Car Rental System</h2>
+
+<input type="text" id="name" placeholder="Enter Your Name">
+
+<input type="date" id="date">
+
+<button class="btn" onclick="goNext()">Next → Cars</button>
+
+</div>
+
+<script>
+
+function goNext(){
+
+    let name = document.getElementById("name").value;
+
+    let date = document.getElementById("date").value;
+
+    if(!name || !date){
+
+        alert("Enter details");
+
+        return;
+
+    }
+
+    window.location.href =
+
+    "cars.html?name=" + encodeURIComponent(name) + "&date=" + date;
+
+}
+
+</script>
+
+</body>
+
+</html>
