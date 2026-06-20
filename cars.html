@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Cars</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+
+body{
+
+    font-family: Arial;
+
+    margin:0;
+
+    background:#f2f2f2;
+
+}
+
+/* NAV */
+
+.nav{
+
+    background:#111;
+
+    color:white;
+
+    padding:15px;
+
+    text-align:center;
+
+}
+
+/* FORM */
+
+.formBox{
+
+    width:360px;
+
+    background:white;
+
+    margin:20px auto;
+
+    padding:20px;
+
+    border-radius:10px;
+
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
+
+}
+
+input, select{
+
+    width:100%;
+
+    padding:10px;
+
+    margin:8px 0;
+
+}
+
+.btn{
+
+    background:green;
+
+    color:white;
+
+    border:none;
+
+    padding:10px;
+
+    width:100%;
+
+    cursor:pointer;
+
+    border-radius:5px;
+
+}
+
+/* CARS */
+
+.container{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    justify-content:center;
+
+}
+
+.card{
+
+    width:250px;
+
+    background:white;
+
+    margin:15px;
+
+    border-radius:10px;
+
+    overflow:hidden;
+
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
+
+    text-align:center;
+
+}
+
+.card img{
+
+    width:100%;
+
+    height:160px;
+
+    object-fit:cover;
+
+}
+
+.price{
+
+    color:green;
+
+    font-weight:bold;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="nav">
+
+<h3>Available Cars</h3>
+
+</div>
+
+<!-- FORM -->
+
+<div class="formBox">
+
+<h3>Booking Form</h3>
+
+<input type="text" id="name" placeholder="Your Name">
+
+<select id="car">
+
+    <option value="Swift|1500">Swift - ₹1500/day</option>
+
+    <option value="i20|1800">i20 - ₹1800/day</option>
+
+    <option value="Baleno|1900">Baleno - ₹1900/day</option>
+
+    <option value="Honda City|2500">Honda City - ₹2500/day</option>
+
+    <option value="Thar|3500">Thar - ₹3500/day</option>
+
+    <option value="Audi A4|4500">Audi A4 - ₹4500/day</option>
+
+    <option value="BMW|5000">BMW - ₹5000/day</option>
+
+    <option value="Mercedes|6000">Mercedes - ₹6000/day</option>
+
+</select>
+
+<label>From Date</label>
+
+<input type="date" id="fromDate">
+
+<label>To Date</label>
+
+<input type="date" id="toDate">
+
+<button class="btn" onclick="book()">Book + PDF + WhatsApp</button>
+
+<p id="result"></p>
+
+</div>
+
+<!-- CARS DISPLAY -->
+
+<div class="container">
+
+<div class="card">
+
+<img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70">
+
+<h3>Swift</h3>
+
+<div class="price">₹1500/day</div>
+
+</div>
+
+<div class="card">
+
+<img src="https://images.unsplash.com/photo-1600706432502-77a0e2e3c3f3">
+
+<h3>i20</h3>
+
+<div class="price">₹1800/day</div>
+
+</div>
+
+<div class="card">
+
+<img src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2">
+
+<h3>Baleno</h3>
+
+<div class="price">₹1900/day</div>
+
+</div>
+
+<div class="card">
+
+<img src="https://images.unsplash.com/photo-1542362567-b07e54358753">
+
+<h3>Thar</h3>
+
+<div class="price">₹3500/day</div>
+
+</div>
+
+</div>
+
+<script>
+
+// GET DATA FROM HOME PAGE
+
+let params = new URLSearchParams(window.location.search);
+
+let homeName = params.get("name");
+
+let homeDate = params.get("date");
+
+function book(){
+
+    let name = document.getElementById("name").value;
+
+    let carData = document.getElementById("car").value;
+
+    let from = document.getElementById("fromDate").value;
+
+    let to = document.getElementById("toDate").value;
+
+    let [car, price] = carData.split("|");
+
+    price = parseInt(price);
+
+    let start = new Date(from);
+
+    let end = new Date(to);
+
+    let diff = end - start;
+
+    let days = Math.ceil(diff / (1000*3600*24)) + 1;
+
+    if(days <= 0){
+
+        alert("Invalid dates");
+
+        return;
+
+    }
+
+    let total = days * price;
+
+    document.getElementById("result").innerHTML =
+
+    "Total: ₹" + total + " (" + days + " days)";
+
+    // WHATSAPP
+
+    let phone = "919164167886";
+
+    let msg =
+
+`🚗 Car Booking
+
+Home Name: ${homeName}
+
+Home Date: ${homeDate}
+
+Booking Name: ${name}
+
+Car: ${car}
+
+Days: ${days}
+
+Total: ₹${total}`;
+
+    let url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
+
+    window.open(url, "_blank");
+
+    // PDF
+
+    const { jsPDF } = window.jspdf;
+
+    const doc = new jsPDF();
+
+    doc.text("CAR RENTAL INVOICE", 20, 20);
+
+    doc.text("Name: " + name, 20, 40);
+
+    doc.text("Car: " + car, 20, 50);
+
+    doc.text("Days: " + days, 20, 60);
+
+    doc.text("Total: ₹" + total, 20, 70);
+
+    doc.save("invoice.pdf");
+
+}
+
+</script>
+
+</body>
+
+</html>
